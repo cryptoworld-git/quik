@@ -19,26 +19,26 @@ def connect(db, host, port, backup=None):
 def setup(db, host, port, tables, backup=None):
     '''Setup databases, tables, and indexes'''
     try:
-        conn = r.connect(host=host, port=port)
+        conn = r.connect(host=host, port=port)  # Connect to the database server
     except:
         conn = r.connect(host=backup, port=port)
 
     try:
-        r.db_create(db).run(conn)
+        r.db_create(db).run(conn)  # Create the database
     except:
         pass
 
-    for table, indexes in tables.items():
+    for table, indexes in tables.items():  # Seperate the tables and indexes and iterate over them
         try:
-            r.db(db).table_create(table).run(conn)
+            r.db(db).table_create(table).run(conn)  # Try to create the table
         except:
             pass
-        for index in indexes:
+        for index in indexes:  # Create the indexes for the specified table
             try:
                 if type(index) is list:
-                    r.db(db).table(table).index_create(index[0], **index[1]).run(conn)
+                    r.db(db).table(table).index_create(index[0], **index[1]).run(conn)  # Create compound indexes if we need to 
                 else:
-                    r.db(db).table(table).index_create(index).run(conn)
+                    r.db(db).table(table).index_create(index).run(conn)  # Create a normal index
             except:
                 pass
 
