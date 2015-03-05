@@ -10,7 +10,7 @@ keyfile = 'config/id_rsa'
 quicrypt = crypto.QuiCrypt()
 randstr = quicrypt.secretGenerator
 
-api_host = 'http://dah.io:9818'
+api_host = 'http://quik.dah.io/api/v1/'
 
 
 class QuikError(Exception):
@@ -38,15 +38,18 @@ def urlreq(url, data):
 
 def registerQuik(name, email, pubkey, hashstr):
     '''Register a new user account with Quik'''
-    print "Registering for the Quik Service with the username {} and email {}".format(name, email)
+    req_url = '{}account/user/auth/new'.format(api_host)
+    print "Registering for Quik using the url {} with the username {} and email {}".format(req_url, name, email)
     data = dict(name=name, email=email, key=pubkey, password=hashstr)  # Pass USERNAME, EMAIL, PUBLIC KEY, and the hashed password + salt
-    return json.loads(urlreq('{}/user/new'.format(api_host), data))['id']
+    response = urlreq(req_url, data)
+    return json.loads(response)['id']
 
 
 def authQuik(uuid, method='signature'):
     '''Perform step number one of authentification with the Quik servers'''
     data = dict(id=uuid, method=method)
-    response = urlreq('{}/user/authenticate'.format(api_host), data)  # All we have to do is fetch the login information like a token and salt
+    req_url = '{}account/user/auth/init'.format(api_host)
+    response = urlreq(req_url, data)  # All we have to do is fetch the login information like a token and salt
     return json.loads(response)
 
 
@@ -63,11 +66,12 @@ def loginQuik(uuid, auth, passwd=None, privkey=None):
     else:  
         auth['signature'] = quicrypt.createSignature(privkey, auth['login_session'], passwd)  # Sign the login session with our private key
 
-    return urlreq('{}/user/login'.format(api_host), auth)  # Send the finished authentification to the server and get the reply
+    req_url = '{}account/user/auth/login'.format(api_host)
+    return urlreq(req_url, auth)  # Send the finished authentification to the server and get the reply
 
 
 
-email = 'ksaredfx+testing@gmail.com'
+email = 'ksaredfx+secondary@gmail.com'
 passphrase = 'meow'
 privkey, pubkey = quicrypt.keyGenerator(4096, passphrase)
 

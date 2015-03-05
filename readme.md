@@ -17,43 +17,29 @@
 
 #### Chat Modes
 
-Quik clients should support multiple chat modes. Chats in themselves may be able to house multiple different chat modes. This means that users are able to swap modes on the fly, able 
-to change inbetween each individual message and does not require that the other party uses the same mode of communication. 
+Quik clients should support multiple chat modes. Chats in themselves may be able to house multiple different chat modes. This means that users are able to swap modes on the fly, able to change inbetween each individual message and does not require that the other party uses the same mode of communication. 
 
 Different communication modes should be easy to spot when looking at actual messages. There should be a clear difference. 
     For example, each chat mode can have a particular background colour for the specific message. 
 
 ##### Client to Client
 
-**Standard** - *Default* - Encrypted End-to-End - Fully encrypted messages between clients, encrypted over the wire, while in databases, and in memory. Complete and total encryption 
-between both users. Every message should be encrypted with it's own random AES key and then the AES key encrypted via the RSA Public Key of the recipient. 
+**Standard** - *Default* - Encrypted End-to-End - Fully encrypted messages between clients, encrypted over the wire, while in databases, and in memory. Complete and total encryption between both users. Every message should be encrypted with it's own random AES key and then the AES key encrypted via the RSA Public Key of the recipient. 
 
-**OTR** - *Optional* - Encrypted End-to-End without relay servers - This requires negotiation between the clients via the relay servers to establish a OTR connection directly between 
-the two or more clients. This is similar to DSS in IRC chat. Due to the nature of this connection, if you lose internet connection you'll be disconnected and have to re-negotiate your 
-connection to the other client. In some cases this may be difficult or impossible to use due to local firewall or NAT settings. 
+**OTR** - *Optional* - Encrypted End-to-End without relay servers - This requires negotiation between the clients via the relay servers to establish a OTR connection directly between the two or more clients. This is similar to DSS in IRC chat. Due to the nature of this connection, if you lose internet connection you'll be disconnected and have to re-negotiate your connection to the other client. In some cases this may be difficult or impossible to use due to local firewall or NAT settings. 
 
-**Unencrypted** - *Optional* - No Encryption at all - While this is not suggested, it should be a feature avaliable to users who do not care at all about encryption or may be 
-experiencing issues with encryption on their devices. This just sends the message completely as plaintext. It will however be encrypted upon being recieved by the client when it is 
-stored into the local device database. 
+**Unencrypted** - *Optional* - No Encryption at all - While this is not suggested, it should be a feature avaliable to users who do not care at all about encryption or may be experiencing issues with encryption on their devices. This just sends the message completely as plaintext. It will however be encrypted upon being recieved by the client when it is stored into the local device database. 
 
 ##### Client to Group extra modes
 
 Client to Group modes are optional modes that exist in addition to the Client to Client modes. 
 None of these modes are avaliable while in the "Unencrypted" Client to Client mode.
 
-**Shared Key** - *Default* - Strong End to End Encryption - This mode replaces "Standard" Client to Client encryption. Due to the amount of difficulty that a client might have 
-encrypting the same message over and over again for different clients in the same group chat, this establishes that it should use the same key between the group. While each message 
-will be encrypted with it's own random key, each client will recieve the message encrypted with the same AES key. The AES key will still be encrypted with each clients RSA Public Key.  
+**Shared Key** - *Default* - Strong End to End Encryption - This mode replaces "Standard" Client to Client encryption. Due to the amount of difficulty that a client might have encrypting the same message over and over again for different clients in the same group chat, this establishes that it should use the same key between the group. While each message will be encrypted with it's own random key, each client will recieve the message encrypted with the same AES key. The AES key will still be encrypted with each clients RSA Public Key.  
 
-**Pre-Shared key** - *Optional* - Transit and Resting State encryption - This mode is a slightly weaker version of the "Shared key" option, and also replaces "Standard" Client to 
-Client encryption. Due to the difficulty in encrypting a message key for multiple clients. This asks the server to generate a RSA key for the entire group, and hands the public key to 
-the clients. This means when the message is encrypted, The AES key will be shared like "Shared Key" but the RSA key will be the one generated for the entire group, offloading all of 
-the work to the Relay Server. The Relay Server will then be responsible to decrypt the AES key but not the message itself, and re-encrypt it for each member of the group using their 
-personal RSA public keys. *This mode is not avaliable in OTR*
+**Pre-Shared key** - *Optional* - Transit and Resting State encryption - This mode is a slightly weaker version of the "Shared key" option, and also replaces "Standard" Client to Client encryption. Due to the difficulty in encrypting a message key for multiple clients. This asks the server to generate a RSA key for the entire group, and hands the public key to the clients. This means when the message is encrypted, The AES key will be shared like "Shared Key" but the RSA key will be the one generated for the entire group, offloading all of the work to the Relay Server. The Relay Server will then be responsible to decrypt the AES key but not the message itself, and re-encrypt it for each member of the group using their personal RSA public keys. *This mode is not avaliable in OTR*
 
-**Paranoid** - *Optional* - Completely paranoid End-to-End Encryption - This mode replicates the "Standard" Client to Client encryption. This may be very taxing for your device and 
-require a lot of memory and cpu power for larger groups. Each message will be encrypted with it's own random AES key for each member of the group, and use their personal RSA Public Key 
-to encrypt the AES key. This in almost all cases is completely unnessisary and unneeded. *This mode may be left out of the client entirely without issue* 
+**Paranoid** - *Optional* - Completely paranoid End-to-End Encryption - This mode replicates the "Standard" Client to Client encryption. This may be very taxing for your device and require a lot of memory and cpu power for larger groups. Each message will be encrypted with it's own random AES key for each member of the group, and use their personal RSA Public Key to encrypt the AES key. This in almost all cases is completely unnessisary and unneeded. *This mode may be left out of the client entirely without issue* 
 
 #### Memory and Storage
 
@@ -101,5 +87,4 @@ While it is unlikely to be an issue, greater length keys are also possible, such
 
 Quik uses HMAC with SHA512 for login authentification in some cases. This is likely when you choose to login via passwords. 
 This means your client needs to support HMAC and SHA512 hashing. 
-
 

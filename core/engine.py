@@ -11,7 +11,7 @@ iterate = handler.Iterate()
 webdata = handler.WebData()
 quicrypt = crypto.QuiCrypt()
 
-c = handler.configGen()
+c = handler.Bunch(webdata.loader('config.json'))
 
 
 try:
@@ -73,7 +73,7 @@ class Trigger(object):
         '''Huey task to format and send an email to users to verify their account on registration'''
         items['boundary'] = "--==_mimepart_{}".format(quicrypt.secretGenerator())  # Generate our BOUNDARY using a random string
         content = 'Content-type: multipart/alternative;\r\n   boundary="{}";\r\n  charset=UTF-8'.format(items['boundary'])  # Generate the content headers
-        message = webdata.email(filename).format(**items)  # Populate the template using items passed from the function that called it
+        message = webdata.loader(filename).format(**items)  # Populate the template using items passed from the function that called it
         email = "From: Quik <{}>\r\nTo: {}\r\nMIME-Version: 1.0\r\n{}\r\nSubject: {}\r\n\r\n{}".format(sender, ', '.join(recipients), content, subject, message)
         # Above string puts the email together with it's main headers and content headers, then add in the populated template
         smtpObj = smtplib.SMTP(host)  # Create a SMTP object

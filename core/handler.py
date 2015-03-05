@@ -13,21 +13,32 @@ except:
 class Bunch(object):
     '''Create a BUNCH object that moves things in a dict into namespace'''
     def __init__(self, adict):
+        if type(adict) is str:
+            adict = json.loads(adict)
         self.__dict__.update(adict)
 
 
-def configGen():
-    '''Load a config from disk into memory and move it into namespace'''  # Rewrite this and the email loader to be cleaner (?)
-    conf = 'config/config.json'
-    try:
-        with open('{}'.format(conf), 'r') as f:
-            config = json.load(f)
-    except:
-        with open('../{}'.format(conf), 'r') as f:  # Second attempt to see if it's a folder up or not
-            config = json.load(f)
+def printerror(error):
+    error_no = error['Error']
+    error_msg = error_dict[error_no]
+    error[error_no] = error_msg
+    return error
 
-    return Bunch(config)
+class StatusCodes(object):
+    def __init__(self): 
+        try:
+            with open('config/statuscodes.json', 'U') as f:
+                self.status_dict = json.load(f)
+        except Exception as e:
+            print e
+            with open('../config/statuscodes.json', 'U') as f:  # Second attempt to see if it's a folder up or not
+                self.status_dict = json.load(f)
 
+    def convert(self, status):
+        status_no = status["Status"]
+        status_msg = self.status_dict[status_no]
+        status[status_no] = status_msg
+        return status
 
 class WebData(object):
     def __init__(self):
@@ -45,13 +56,13 @@ class WebData(object):
 
         return Bunch(post)
 
-    def email(self, filename):
-        '''Load an email template from disk into memory'''
+    def loader(self, filename):
+        '''Load a file from disk and into memory'''
         try:
-            with open('{}'.format('config/{}'.format(filename)), 'U') as f:
+            with open('config/{}'.format(filename), 'U') as f:
                 return f.read()
-        except:
-            with open('{}'.format('../config/{}'.format(filename)), 'U') as f:  # Second attempt to see if it's a folder up or not
+        except Exception as e:
+            with open('../config/{}'.format(filename), 'U') as f:  # Second attempt to see if it's a folder up or not
                 return f.read()
 
 
