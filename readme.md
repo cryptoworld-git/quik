@@ -14,16 +14,18 @@ Notes:
 **Register**: *Client* -> *Auth Server* ~ http://quik.dah.io/api/v1/account/user/auth/new
 ```json
 {
-"payload": 
-    {"email": "", "name": "", "key" "", "password": ""}, 
-"signature": ""
+  "payload": 
+    {
+      "email": "", "name": "", "key": "", "password": ""
+    }, 
+  "signature": ""
 } 
 ```
   - `email` Must be unique
   - `name` is your display name and will be displayed case sensitive
   - `key` is your public key
   - `password` is your complete password hash with salt headers, this is optional.
-  - `signature` is a signature of `payload` generated with `key` 
+  - `signature` is a signature of `payload` generated with `key`  
  -> **Give Account**
   
   &nbsp;
@@ -31,10 +33,13 @@ Notes:
 **Give Account**: *Auth Server* -> *Client* ~ 
 ```json
 {
-"status": "", 
-"payload": 
-    {"verified": false, "name": "", "display": "", "created": 100000.01, "email": "", "key": "", "uuid": ""}, 
-"verification": 
+  "status": "", 
+  "payload": 
+    {
+      "verified": false, "name": "", "display": "", 
+      "created": 100000.01, "email": "", "key": "", "uuid": ""
+    }, 
+  "verification": 
     {"signature": "", "uuid": ""}
 }
 ```
