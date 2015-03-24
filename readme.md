@@ -11,7 +11,7 @@ This is the documentation for all of the API calls for the Quik API
 &nbsp;
   - All replies from the server will include a `verification` array containing `signature` and `uuid`
     - `signature` is the `payload` signed with all the keys sorted alphabetically
-    - `uuid` is the uuid of the key it was signed with, this is for if the key is changed from the enbedded one
+    - `uuid` is the identifier of the *system* key it was signed with
     - Updated keys can be requested from http://quik.dah.io/api/v1/systems/key/`uuid`
     - If the returned key isn't the parent key, it will be signed by the parent key for verification  
 &nbsp;
@@ -34,7 +34,7 @@ This is the documentation for all of the API calls for the Quik API
   - `email` Must be unique
   - `name` is your display name and will be displayed case sensitive
   - `key` is your public key
-  - `password` is your complete password hash with salt headers, this is optional.  
+  - `password` is your complete password hash with salt headers, this is optional.
 
  -> **Give Account**
   
@@ -56,7 +56,7 @@ This is the documentation for all of the API calls for the Quik API
   - `name` is a lowercase version of the `name` sent to the server
   - `display` is the properly cased version
   - `created` is the time that the account was created
-  - `verified` is `false` by default and changes to `true` when email verification is complete  
-  
+  - `verified` is `false` by default and changes to `true` when email verification is complete
+
  -> **NONE**
 
