@@ -1,0 +1,41 @@
+--{boundary}
+Content-Type: text/plain;
+ charset=UTF-8
+
+Welcome to Quik!
+The secure Instant Messaging platform
+
+We see you've just signed up for Quik, and we're glad to have you join us {display}
+But first, we're going to need you to verify your email...
+
+Here's the link to confirm your email 
+http://tritanium:9818/user/authenicate?token={token}
+
+Hope you enjoy using Quik as much as we enjoyed creating it!
+
+--{boundary}
+Content-Type: text/html;
+ charset=UTF-8
+
+Welcome to Quik! <br />
+The secure Instant Messaging platform <br />
+<br />
+We see you've just signed up for Quik, and we're glad to have you join us {display} <br />
+But first, we're going to need you to verify your email... <br />
+<br />
+Click <a href='{token}'>Here</a> to verify your account <br />
+This token will expire in 24 hours and your account will be deleted if you do not verify yourself in time <br />
+<br />
+Incase the above link doesn't work, here is the full link {token} <br />
+<br />
+Hope you enjoy using Quik as much as we enjoyed creating it! <br />
+
+<div itemscope itemtype="http://schema.org/EmailMessage">
+  <div itemprop="action" itemscope itemtype="http://schema.org/ViewAction">
+    <link itemprop="url" href="{token}"></link>
+    <meta itemprop="name" content="Confirm Account"></meta>
+  </div>
+  <meta itemprop="description" content="Confirm your Quik account registration"></meta>
+</div>
+
+--{boundary}--

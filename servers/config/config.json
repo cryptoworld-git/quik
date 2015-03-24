@@ -1,0 +1,33 @@
+{
+    "db_back": "tritanium", 
+    "db_host": "127.0.0.1", 
+    "db_name": "Quik", 
+    "db_port": "28015", 
+
+    "syst_table": "system", 
+    "user_table": "users", 
+    "grup_table": "groups",
+    "auth_table": "auth",
+    "grky_table": "groupkey",
+    "sess_table": "sessions",
+    "mesg_table": "messages",
+
+    "web_host": "127.0.0.1", 
+    "acc_port": "9650",
+    "sys_port": "9651",
+    "ses_port": "9652",
+    "pro_port": "9653",
+    "msg_port": "9660",
+
+    "acc_prefix": "/api/v1/account",
+    "sys_prefix": "/api/v1/systems",
+    "ses_prefix": "/api/v1/session",
+    "pro_prefix": "/api/v1/profile",
+    "msg_prefix": "/api/v1/message",
+
+    "system_key": "4f922bdf-9d11-4842-bcba-f8d4ff2ab6da",
+
+    "per_page": "40",
+
+    "home_url": "http://quik.dah.io"
+}

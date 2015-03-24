@@ -1,0 +1,52 @@
+{
+    "100": "Error: Base Error",
+    "110": "Error: Function not Implimented",
+    "112": "Error: Response was invalid, missing, or a fragment",
+    "114": "Error: Payload signature was invalid, missing, or a fragment",
+
+
+    "200": "Success: Base Success",
+
+
+    "500": "Error: Generic Hub Server Error",
+
+    "560": "Error: Generic Non Existant Error",
+    "561": "Error: Username or Email adress could not be found",
+    "562": "Error: Username could not be found",
+    "563": "Error: Email address could not be found",
+    "564": "Error: UUID (User ID) could not be found",
+    "566": "Error: Verification Token or UUID was invalid",
+    "568": "Error: Search type was invalid",
+    
+    "570": "Error: Generic Modification Error",
+    "571": "Error: Email address was invalid",
+    "572": "Error: UUID (User ID) was invalid", 
+    "574": "Error: Public Key was invalid",
+
+    "580": "Error: Generic Authentification Error",
+    "581": "Error: Account has not been verified yet",
+    "582": "Error: Login method requested was unavaliable",
+    "584": "Error: Login request timed out",
+    "586": "Error: Login signature provided was invalid",
+    "588": "Error: Password field was invalid",
+    "589": "Error: Password hash is too weak",
+    
+    "590": "Error: Generic Conflict Error",
+    "591": "Error: Email address already exists",
+
+
+    "600": "Error: Generic Message Relay Error",
+
+
+    "700": "Success: Generic Hub Server Success",
+
+    "710": "Success: Generic Login Success",
+    "711": "Success: Logged in",
+
+    "720": "Success: Generic Modification Success",
+
+    "730": "Success: Generic Authentification Success",
+
+
+    "800": "Success: Generic Message Relay Success"
+}
