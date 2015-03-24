@@ -11,13 +11,11 @@ Notes:
 ---------------------------------------------------------------------------------------------------------
 ## Registration 
 
-**Register**: *Client* -> *Auth Server* ~ http://quik.dah.io/api/v1/account/user/auth/new
+**Register**: *Client -> Auth Server* ~ http://quik.dah.io/api/v1/account/user/auth/new
 ```json
 {
   "payload": 
-    {
-      "email": "", "name": "", "key": "", "password": ""
-    }, 
+    {"email": "", "name": "", "key": "", "password": ""}, 
   "signature": ""
 } 
 ```
@@ -30,15 +28,13 @@ Notes:
   
   &nbsp;
 
-**Give Account**: *Auth Server* -> *Client* ~ 
+**Give Account**: *Auth Server -> Client*
 ```json
 {
   "status": "", 
   "payload": 
-    {
-      "verified": false, "name": "", "display": "", 
-      "created": 100000.01, "email": "", "key": "", "uuid": ""
-    }, 
+    {"verified": false, "name": "", "display": "", 
+    "created": 100000.01, "email": "", "key": "", "uuid": ""}, 
   "verification": 
     {"signature": "", "uuid": ""}
 }
