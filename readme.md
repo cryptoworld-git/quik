@@ -35,6 +35,7 @@ This is the documentation for all of the API calls for the Quik API
   - `name` is your display name and will be displayed case sensitive
   - `key` is your public key
   - `password` is your complete password hash with salt headers, this is optional.  
+
  -> **Give Account**
   
   &nbsp;
@@ -56,5 +57,6 @@ This is the documentation for all of the API calls for the Quik API
   - `display` is the properly cased version
   - `created` is the time that the account was created
   - `verified` is `false` by default and changes to `true` when email verification is complete  
+  
  -> **NONE**
 
