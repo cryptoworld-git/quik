@@ -1,0 +1,164 @@
+Team: ksaredfx, lunar, beard
+
+App Platforms: Desktop (Windows, macOS, Linux 'deb/rpm') + Flutter >> Android/iOS App.
+
+Models:
+  - Free = Almost all of the application will be provided for free, without advertising.
+  - Paid = Some features such as SMS Proxied through us; will be a "Paid" feature / part of a low priced monthly membership due to underlying costs.
+
+
+Quik Client
+  - SMS Integration on Android
+    - Allows reading encrypted SMS and decrypting it in the Quik app
+    - Allows sending messages via Quik to other SMS or Quik contacts unencrypted or encrypted (Costs, uses proxy service)
+    - Allows sending messages via SMS to other SMS contacts unencrypted or encrypted (Free, uses your service)
+      - Allows communication with a desktop client to leverage this
+
+  - XMPP Integration
+
+  - Attempts to merge all communication methods into a single "Thread" where possible
+  - Requires user you're communicating with to use the same key signature across all methods (And encrypted chat)
+  - Client will "SEND" via multiple methods until it recieves a "RECIEVED" report unless otherwise specified
+
+  - Generates or imports your key (Requires importing for multiple syncronized devices)
+  - Allows signing with your old key to publish a new key
+
+
+Quik Relay
+  - Allows messages to be sent to/from other protocols (As a bridge)
+  - Stores messages temporarily to ensure all clients recieve a copy
+  - Allows repeating local messages to other clients
+  - Only handles encrypted data where possible
+  - Only stores encrypted data for set time periods
+  - Handshakes to gather GFM Tokens if using an Android device
+  - Holds open WebSocket connection with client when needed
+
+  - TOR;
+    - All network protocols will be accessable via TOR networks (Proxied Communication)
+    - Tor IRC nodes
+    - Tor Quik nodes
+    - Tor XMPP nodes
+
+  - SMS Relay;
+    - Is a Paid Service
+    - RECIEVING:
+      - Allows someone to text a # with encrypted, or unencrypted data to be relayed to a Quik client
+      - Encrypts unencrypted data and immediately tosses the unencrypted portion
+    - SENDING:
+      - Allows a user without network access to send an encrypted message via client with SMS to their Quik Contacts
+
+  - XMPP;
+    - Either has the option to choose a username from the master domain for xmpp node "xmpp.is" or any of the following supported domains (aka: xmpp.co, xmpp.cx, xmpp.xyz, xmpp.fi, xmpp.si, and master Tor Hidden Service address for xmpp.is)
+    - Option to add other XMPP/Jabber server providers as long as they follow a similar harden security practices; a long with setup for integration process.
+    - Paid option to allow the use of custom domains/hostname with a simple SRV setup for Client+Server.
+    - Prosody 10 supported (https://prosody.im/doc/release/0.10.0)
+
+  - IRC;
+    - RECIEVING:
+      - Allows an IRC user to connect to the "Quik Relay" to communicate with Quik Clients
+      - Encrypts unencrypted data and immediately tosses the unencrypted portion
+
+    - SENDING:
+      - Allows a Quik User to reply to IRC based users
+
+  - Quik;
+    - Allows direct Quik to Quik message relaying (Using Quik Message Protocol)
+    - Can establish a P2P connection for privacy mode (Requires verified handshakes)
+    - Can establish a Tor-Proxied connection to other clients when GFM is disabled
+
+
+Quik Auth
+  - Stores user profiles in a "directory"
+  - Lists methods of communication each client is accepting (Default: Quik only)
+  - Stores their public key for initial handshake to the client
+  - Allows a public key "Chain" to be visible to show old keys used
+
+
+Quik Protocol
+  - Encrypts all messages and data before relaying
+  - Quik to Quik Handshake
+    - A will send a signed block of data containing [USERNAME, PUBLIC_KEY] to B
+    - B will reply with a signed block of [USERNAME, PUBLIC_KEY, ENC_RNG] to A
+    - A and B will attempt to search for USERNAME in the Quik Auth Database, and validate keys.
+      - If keys are valid for those users, they will be stored in the local database with all their valid usernames and contact methods
+      - If keys are NOT valid for those users, they will be flagged as such but still allowed to communicate
+    - A will use privkey to decrypt ENC_RNG and validate B's public key with the signature
+    - A will reply with a signed block of [ENC_KEY, ENC_RNG] to B
+    - B will use privkey to decrypt ENC_KEY and begin trading messages with AES-CEC using the passed Hash-Chain Seed (Key)
+
+  - Send Block
+    [METHOD, SIG, ENCR_MSG, EXTRA]
+
+  - Quik to Relay Handshake
+    - Relay will dumb-pass handshakes for Quik-to-Quik communication
+    - Relay will handshake as Quik-to-Quik for Quik-to-Alt Communication
+
+  - Read Reciepts;
+    {
+      f: person the message was to,
+      mid: UUID4 that is being marked read/recieved
+      s: READ
+      t: time it was read
+    }
+
+  - Client Repeats;
+    - Completely encrypted block of data sent to the Quik Relay to repeat to other clients
+    - Signed and Encrpyted using own-keys
+    - Has a METHOD of "QUIK_R"
+
+  - Message Block Structure;
+    {
+      to: recipient,
+      f: sender,
+      d: encoded data block,
+      m: encoded text message (UTF8),
+      mid: UUID4 given to this message,
+      t: timestamp message was sent,
+      via: List method it was sent (Quik, SMS, XMPP, IRC)
+    }
+
+  - Data Block Structure;
+    {
+      t: filetype,
+      m: metadata,
+      d: raw data
+    }
+
+  - Examples;
+
+      - Quik to Standard SMS
+        Sending:
+          Encrypted Message:  {"to": "+17057166443", "f": "+17058283304", "m": "Dude, whats up?", mid: 000000-0000-000000, t: 0.0, via: "QUIK"}
+          Complete Block:     ["SMS", "==XXXX", "==YYYY"]
+            Sends: "Dude, whats up?" from +17058283304 to +17057166443
+            Must be decrypted by the relay!
+            Leaks Metadata on the SMS side!
+        Replies:
+          Encrypted Message:  {"to": "+17058283304", "f": "+17057166443", "m": "Dude, whats up?", mid: 000000-0000-000000, t: 0.0, via: "SMS"}
+          Complete Block:     ["QUIK", "==XXXX", "==YYYY", "quik_username#id"]
+            Encrypted by the Quik Relay from Unencrypted Message!
+
+      - Quik to IRC
+        Sending:
+          Encrypted Message:  {"to": "ksaredfx", "f": "quik_username#id", "m": "Dude, whats up?", mid: 000000-0000-000000, t: 0.0, via: "QUIK"}
+          Complete Block:     ["IRC", "==XXXX", "==YYYY"]
+            Sends: "Dude, whats up?" to a client named "ksaredfx" connected to the Quik IRC Relay
+            Must be decrypted by the relay!
+            Leaks Metadata on the recipients side!
+
+        Replies:
+          Encrypted Message:  {"to": "quik_username#id", "f": "ksaredfx", "m": "Dude, whats up?", mid: 000000-0000-000000, t: 0.0, via: "IRC"}
+          Complete Block:     ["QUIK", "==XXXX", "==YYYY", "quik_username#id"]
+            Encrypted by the Quik Relay from Unencrypted Message!
+
+      NOTE FOR ABOVE EXAMPLES:
+        In the case that either the IRC or SMS recipient is using a Quik-Compatible client, A _E must be appened to their method flag in order to have end-to-end encryption.
+        In the case that the IRC or SMS sender is using a Quik-Compatible client, the Quik Relay will simply pass along any Quik-Format messages instead of encrypting them. The via should match the _E format.
+          This has the added bonus of syncronizing with existing threads with that user.
+        Quik to Quik IRC would be "IRC_E" which means the Quik Relay should not attempt to decrypt, and should expect the recipient to be able to decrypt a Quik Message
+      - Quik to Quik Relay;
+        Encrypted:    ["QUIK", "==XXXX", "==YYYY", "quik_username#id"]
+          Sends: "Dude, whats up?" to another Quik client where it has to decrypt the block to figure out when, and who it was from
+      - Quik to Quik:
+        Encrypted:    ["QUIK", "==XXXX", "==YYYY"]
+          Direct connections don't require a recipient to be marked
